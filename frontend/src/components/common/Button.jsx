@@ -52,6 +52,7 @@ const Button = ({
             type={type}
             disabled={disabled || loading}
             className={classes}
+            onClick={onClick}
             {...props}
         >
             {/* Loading Spinner */}

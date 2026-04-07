@@ -7,6 +7,7 @@ import {
     selectConfirmDialog,
     closeConfirmDialog,
 } from "@features/ui/uiSlice";
+import { runConfirmCallback, clearConfirmCallback } from "@utils/confirmCallback";
 import Button from "./Button";
 
 const ConfirmDialog = () => {
@@ -39,12 +40,15 @@ const ConfirmDialog = () => {
         gsap.to(bgRef.current, {
             opacity: 0,
             duration: 0.2,
-            onComplete: () => dispatch(closeConfirmDialog()),
+            onComplete: () => {
+                clearConfirmCallback();
+                dispatch(closeConfirmDialog());
+            },
         });
     };
 
     const handleConfirm = () => {
-        if (typeof dialog.onConfirm === "function") dialog.onConfirm();
+        runConfirmCallback();
         handleClose();
     };
 

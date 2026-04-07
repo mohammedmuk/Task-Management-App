@@ -58,7 +58,7 @@ const TaskColumn = ({ status, tasks = [], loading = false }) => {
                     {/* Status Dot */}
                     <span className={`
             w-2.5 h-2.5 rounded-full
-            ${meta.dot} animate-pulse-slow
+            ${meta.dot}
           `} />
 
                     {/* Label */}

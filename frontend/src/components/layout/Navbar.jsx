@@ -192,7 +192,7 @@ const Navbar = () => {
               text-xs font-bold text-white
               shrink-0
             ">
-                            {getInitials(user?.username || "User")}
+                            {getInitials(user || "User")}
                         </div>
 
                         {/* Name */}
@@ -201,7 +201,7 @@ const Navbar = () => {
               font-medium text-white/80
               max-w-[100px] truncate
             ">
-                            {user?.username || "User"}
+                            {user || "User"}
                         </span>
                     </button>
 

@@ -25,6 +25,7 @@ import {
     openDetailPanel,
     openConfirmDialog,
 } from "@features/ui/uiSlice";
+import { setConfirmCallback } from "@utils/confirmCallback";
 import useTasks from "@hooks/useTasks";
 
 const TaskCard = ({ task, index }) => {
@@ -80,20 +81,20 @@ const TaskCard = ({ task, index }) => {
 
     // ── Delete with exit animation ────────────────────
     const handleDelete = () => {
+        setConfirmCallback(() => {
+            gsap.to(cardRef.current, {
+                opacity: 0,
+                x: -30,
+                scale: 0.9,
+                duration: 0.3,
+                ease: "power2.in",
+                onComplete: () => dispatch(deleteTask(task.id)),
+            });
+        });
         dispatch(
             openConfirmDialog({
                 title: "Delete Task",
                 message: `Are you sure you want to delete "${task.title}"?`,
-                onConfirm: () => {
-                    gsap.to(cardRef.current, {
-                        opacity: 0,
-                        x: -30,
-                        scale: 0.9,
-                        duration: 0.3,
-                        ease: "power2.in",
-                        onComplete: () => dispatch(deleteTask(task.id)),
-                    });
-                },
             })
         );
         setMenuOpen(false);

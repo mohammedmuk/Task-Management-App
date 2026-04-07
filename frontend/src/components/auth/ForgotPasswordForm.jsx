@@ -139,7 +139,7 @@ const ForgotPasswordForm = () => {
         await forgotPassword({
             email: form.email,
             code: form.code,
-            new_password: form.newPassword,
+            password: form.newPassword,
         });
     };
 

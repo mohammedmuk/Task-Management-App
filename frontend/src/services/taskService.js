@@ -1,11 +1,31 @@
 import api from "./api";
 import { ENDPOINTS } from "@utils/constants";
 
+// ── Status Mapping (Frontend → API) ─────────────────
+const FRONTEND_TO_API_STATUS = {
+    todo: "pending",
+    in_progress: "in_progress",
+    done: "completed",
+};
+
+const toApiStatus = (status) => FRONTEND_TO_API_STATUS[status] || status;
+
+const toApiPayload = (data) => {
+    if (!data || !data.status) return data;
+    return { ...data, status: toApiStatus(data.status) };
+};
+
 const taskService = {
 
     // ── GET /tasks/ ─────────────────────────────────
     getAllTasks: async () => {
         const res = await api.get(ENDPOINTS.TASKS);
+        return res.data;
+    },
+
+    // ── GET tasks by full URL (pagination) ──────────
+    getTasksByUrl: async (url) => {
+        const res = await api.get(url);
         return res.data;
     },
 
@@ -21,7 +41,7 @@ const taskService = {
             title,
             description,
             priority,
-            status,
+            status: toApiStatus(status),
             created_at,
         });
         return res.data;
@@ -29,13 +49,13 @@ const taskService = {
 
     // ── PUT /tasks/:pk/ ─────────────────────────────
     updateTask: async (pk, data) => {
-        const res = await api.put(ENDPOINTS.TASK(pk), data);
+        const res = await api.put(ENDPOINTS.TASK(pk), toApiPayload(data));
         return res.data;
     },
 
     // ── PATCH /tasks/:pk/ ───────────────────────────
     patchTask: async (pk, data) => {
-        const res = await api.patch(ENDPOINTS.TASK(pk), data);
+        const res = await api.patch(ENDPOINTS.TASK(pk), toApiPayload(data));
         return res.data;
     },
 

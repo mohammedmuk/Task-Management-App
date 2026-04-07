@@ -36,7 +36,8 @@ export const STATUS_COLORS = {
 
 export const ENDPOINTS = {
     REGISTER: "/users/",
-    USER: (pk) => `/users/${pk}/`,
+    USERS_ME: "/users/",
+    USER: `/users/`,
     GENERATE_CODE: "/generate-code/",
     VERIFY_EMAIL: "/verify-email/",
     FORGOT_PASSWORD: "/forgot-password/",

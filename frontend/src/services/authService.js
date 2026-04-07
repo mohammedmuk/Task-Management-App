@@ -61,11 +61,11 @@ const authService = {
     },
 
     // ── POST /forgot-password/ ──────────────────────
-    forgotPassword: async ({ email, code, new_password }) => {
-        const res = await api.post(ENDPOINTS.FORGOT_PASSWORD, {
+    forgotPassword: async ({ email, code, password }) => {
+        const res = await api.patch(ENDPOINTS.FORGOT_PASSWORD, {
             email,
             code,
-            new_password,
+            password,
         });
         return res.data;
     },

@@ -25,7 +25,6 @@ const initialState = {
         open: false,
         title: "",
         message: "",
-        onConfirm: null,
     },
 
     // Global page loading (transitions)
@@ -95,7 +94,6 @@ const uiSlice = createSlice({
                 open: true,
                 title: action.payload.title || "Are you sure?",
                 message: action.payload.message || "",
-                onConfirm: action.payload.onConfirm || null,
             };
         },
         closeConfirmDialog(state) {
@@ -103,7 +101,6 @@ const uiSlice = createSlice({
                 open: false,
                 title: "",
                 message: "",
-                onConfirm: null,
             };
         },
 

@@ -5,6 +5,7 @@ import { HiMail, HiRefresh } from "react-icons/hi";
 import AuthLayout from "./AuthLayout";
 import Button from "@components/common/Button";
 import useAuth from "@hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 // ── OTP / 6-digit Code Input ──────────────────────────
 const CodeInput = ({ value, onChange }) => {
@@ -73,6 +74,7 @@ const CodeInput = ({ value, onChange }) => {
 };
 
 const VerifyEmailForm = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const email = location.state?.email || "";
   const password = location.state?.password;
@@ -95,6 +97,9 @@ const VerifyEmailForm = () => {
 
   // ── Mount animations ──────────────────────────────
   useEffect(() => {
+    if (!email) {
+      navigate("/login");
+    }
     const tl = gsap.timeline();
     tl.fromTo(
       iconRef.current,

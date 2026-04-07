@@ -298,16 +298,13 @@ const Sidebar = () => {
             flex items-center justify-center
             text-xs font-bold text-white
           ">
-            {getInitials(user?.username || "U")}
+            {getInitials(user || "U")}
           </div>
 
           {isOpen && (
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium truncate">
-                {user?.username}
-              </p>
-              <p className="text-xs text-white/30 truncate">
-                {user?.email}
+                {user || "User"}
               </p>
             </div>
           )}

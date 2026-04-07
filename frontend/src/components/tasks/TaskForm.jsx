@@ -135,7 +135,6 @@ const TaskForm = ({ mode = "create" }) => {
         <form
             ref={formRef}
             onSubmit={handleSubmit}
-            className="space-y-5"
             noValidate
         >
             {/* ── Title ─────────────────────────────────── */}

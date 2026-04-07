@@ -1,0 +1,47 @@
+{
+    "count": 9,
+    "next": "http: //localhost:8000/api/v1/tasks/?page=2",
+    "previous": null,
+    "results": [
+        {
+            "id": "ec6081cb-3317-4072-9ed2-880c97d3e320",
+            "title": "Front End Project",
+            "description": "No description",
+            "priority": "medium",
+            "status": "pending",
+            "created_at": "2026-04-01T16:03:55.897829Z"
+        },
+        {
+            "id": "fc38f1d5-08ba-4929-8fcc-24590d7cb91c",
+            "title": "Front End Project",
+            "description": "No description",
+            "priority": "medium",
+            "status": "pending",
+            "created_at": "2026-04-01T16:03:56.809688Z"
+        },
+        {
+            "id": "b9d1fdcc-00ef-42b3-ae31-0e5622e1e132",
+            "title": "Front End Project",
+            "description": "No description",
+            "priority": "medium",
+            "status": "pending",
+            "created_at": "2026-04-01T16:03:57.023974Z"
+        },
+        {
+            "id": "dd1e2d83-468b-463d-bdd9-e4cd579ccb05",
+            "title": "Front End Project",
+            "description": "No description",
+            "priority": "medium",
+            "status": "pending",
+            "created_at": "2026-04-01T16:03:57.330606Z"
+        },
+        {
+            "id": "3dbf8ad7-f4e4-4ab6-aeda-7fe28438fddb",
+            "title": "Front End Project",
+            "description": "No description",
+            "priority": "medium",
+            "status": "pending",
+            "created_at": "2026-04-01T16:03:57.502524Z"
+        }
+    ]
+}   

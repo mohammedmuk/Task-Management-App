@@ -72,6 +72,7 @@ PRIORITY_CHOICES = (
 
 STATUS_CHOICES = (
     ('pending', 'Pending'),
+    ('in_progress', 'In Progress'),
     ('completed', 'Completed'),
 )
 
@@ -83,5 +84,5 @@ class Task(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(max_length=1000, blank=True, null=True)
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='medium')
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)

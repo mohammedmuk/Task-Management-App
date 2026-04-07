@@ -38,8 +38,7 @@ const LoginForm = () => {
   const validate = () => {
     const e = {};
     if (!form.identifier) e.identifier = "Email or username is required";
-    else if (!/\S+@\S+\.\S+/.test(form.identifier))
-      e.identifier = "Enter a valid email or username";
+
     if (!form.password) e.password = "Password is required";
     setErrors(e);
     return Object.keys(e).length === 0;

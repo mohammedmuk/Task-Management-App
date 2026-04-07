@@ -20,9 +20,13 @@ import {
 } from "@features/ui/uiSlice";
 import {
     fetchTasks,
+    fetchTasksPage,
+    fetchAllTasksForStats,
     selectTasksLoading,
     selectTasksError,
     selectAllTasks,
+    selectTasksPagination,
+    selectTaskStats,
 } from "@features/tasks/tasksSlice";
 import { selectUser } from "@features/auth/authSlice";
 
@@ -273,7 +277,6 @@ const EmptyDashboard = ({ onNewTask }) => {
           animate-pulse-slow
         " />
                 <div className="
-          float-icon relative
           w-24 h-24 rounded-3xl
           bg-gradient-to-br from-primary-600/20 to-violet-600/20
           border border-primary-500/20
@@ -281,6 +284,7 @@ const EmptyDashboard = ({ onNewTask }) => {
         ">
                     📋
                 </div>
+
             </div>
 
             {/* Text */}
@@ -306,6 +310,88 @@ const EmptyDashboard = ({ onNewTask }) => {
 };
 
 // ══════════════════════════════════════════════════════
+//  Pagination Controls
+// ══════════════════════════════════════════════════════
+const PaginationControls = ({ pagination, loading, onNext, onPrevious }) => {
+    const { count, next, previous, currentPage } = pagination;
+    const pageSize = 5;
+    const totalPages = Math.ceil(count / pageSize);
+
+    if (count <= pageSize) return null;
+
+    return (
+        <div className="card px-5 py-4 border border-white/5">
+            <div className="flex items-center justify-between">
+                {/* Page Info */}
+                <span className="text-sm text-white/50">
+                    Page {currentPage} of {totalPages}
+                    <span className="text-white/30 ml-2">·</span>
+                    <span className="text-white/30 ml-2">{count} total tasks</span>
+                </span>
+
+                {/* Buttons */}
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={onPrevious}
+                        disabled={!previous || loading}
+                        className={`
+                            flex items-center gap-1.5
+                            px-4 py-2 rounded-xl
+                            text-sm font-medium
+                            border transition-all duration-200
+                            ${previous && !loading
+                                ? 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white hover:scale-[1.02] active:scale-[0.98]'
+                                : 'bg-white/[0.02] border-white/5 text-white/20 cursor-not-allowed'
+                            }
+                        `}
+                    >
+                        <span>←</span>
+                        <span>Previous</span>
+                    </button>
+
+                    {/* Page indicator pills */}
+                    <div className="flex items-center gap-1 mx-2">
+                        {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                            const page = i + 1;
+                            return (
+                                <span
+                                    key={page}
+                                    className={`
+                                        w-2 h-2 rounded-full transition-all duration-200
+                                        ${page === currentPage
+                                            ? 'bg-primary-500 scale-125'
+                                            : 'bg-white/15'
+                                        }
+                                    `}
+                                />
+                            );
+                        })}
+                    </div>
+
+                    <button
+                        onClick={onNext}
+                        disabled={!next || loading}
+                        className={`
+                            flex items-center gap-1.5
+                            px-4 py-2 rounded-xl
+                            text-sm font-medium
+                            border transition-all duration-200
+                            ${next && !loading
+                                ? 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white hover:scale-[1.02] active:scale-[0.98]'
+                                : 'bg-white/[0.02] border-white/5 text-white/20 cursor-not-allowed'
+                            }
+                        `}
+                    >
+                        <span>Next</span>
+                        <span>→</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// ══════════════════════════════════════════════════════
 //  DASHBOARD PAGE
 // ══════════════════════════════════════════════════════
 const DashboardPage = () => {
@@ -316,14 +402,18 @@ const DashboardPage = () => {
     const loading = useSelector(selectTasksLoading);
     const error = useSelector(selectTasksError);
     const tasks = useSelector(selectAllTasks);
+    const pagination = useSelector(selectTasksPagination);
     const modalOpen = useSelector(selectModalOpen);
     const modalType = useSelector(selectModalType);
+    const stats = useSelector(selectTaskStats);
 
-    const doneTasks = tasks.filter((t) => t.status === "done").length;
+    const doneTasks = stats.done;
+    const totalTasks = stats.total;
 
     // ── Fetch tasks on mount ────────────────────────────
     useEffect(() => {
         dispatch(fetchTasks());
+        dispatch(fetchAllTasksForStats());
     }, [dispatch]);
 
     // ── Page header entrance animation ─────────────────
@@ -343,6 +433,12 @@ const DashboardPage = () => {
     }, []);
 
     const handleOpenCreate = () => dispatch({ type: "ui/openModal", payload: "create" });
+    const handleNextPage = () => {
+        if (pagination.next) dispatch(fetchTasksPage(pagination.next));
+    };
+    const handlePrevPage = () => {
+        if (pagination.previous) dispatch(fetchTasksPage(pagination.previous));
+    };
 
     return (
         <div className="flex h-screen overflow-hidden bg-dark-200">
@@ -374,13 +470,13 @@ const DashboardPage = () => {
                 ">
                                     {getGreeting()},{" "}
                                     <span className="text-gradient">
-                                        {user?.username || "there"} 👋
+                                        {user || "there"} 👋
                                     </span>
                                 </h1>
                                 <p className="text-sm text-white/40 mt-1">
-                                    {tasks.length === 0
+                                    {totalTasks === 0
                                         ? "No tasks yet — let's get started!"
-                                        : `You have ${tasks.length} task${tasks.length !== 1 ? "s" : ""} · ${doneTasks} completed`
+                                        : `You have ${totalTasks} task${totalTasks !== 1 ? "s" : ""} · ${doneTasks} completed`
                                     }
                                 </p>
                             </div>
@@ -418,7 +514,7 @@ const DashboardPage = () => {
                         <TaskStats />
 
                         {/* ── Progress Bar ──────────────────────── */}
-                        <ProgressBar done={doneTasks} total={tasks.length} />
+                        <ProgressBar done={doneTasks} total={totalTasks} />
 
                         {/* ── Filters Bar ───────────────────────── */}
                         <TaskFilters />
@@ -451,6 +547,14 @@ const DashboardPage = () => {
                             /* Kanban Board */
                             <TaskBoard />
                         )}
+
+                        {/* ── Pagination Controls ─────────────── */}
+                        <PaginationControls
+                            pagination={pagination}
+                            loading={loading}
+                            onNext={handleNextPage}
+                            onPrevious={handlePrevPage}
+                        />
 
                         {/* Bottom spacer */}
                         <div className="h-8" />

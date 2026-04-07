@@ -26,6 +26,7 @@ import {
     PRIORITY_LABELS,
     STATUS_LABELS,
 } from "@utils/constants";
+import { setConfirmCallback } from "@utils/confirmCallback";
 import { formatDate, timeAgo } from "@utils/helpers";
 import Button from "@components/common/Button";
 
@@ -91,15 +92,15 @@ const TaskDetailPanel = () => {
     }, [isOpen]);
 
     const handleDelete = () => {
+        setConfirmCallback(() => {
+            dispatch(deleteTask(task.id));
+            handleClose();
+            dispatch(showToast({ message: "Task deleted!", type: "success" }));
+        });
         dispatch(
             openConfirmDialog({
                 title: "Delete Task",
                 message: `Are you sure you want to delete "${task?.title}"?`,
-                onConfirm: () => {
-                    dispatch(deleteTask(task.id));
-                    handleClose();
-                    dispatch(showToast({ message: "Task deleted!", type: "success" }));
-                },
             })
         );
     };

@@ -8,30 +8,8 @@ gsap.registerPlugin(ScrollTrigger);
 // ── Feature Card ──────────────────────────────────────
 const FeatureCard = ({ icon, title, desc}) => {
   const ref = useRef(null);
-
-  useEffect(() => {
-    gsap.fromTo(
-      '.feature-card',
-      { opacity: 0, y: 40 },
-      {
-        opacity:    1,
-        y:          0,
-        duration: .5,
-        ease:       "bounce.out",
-        stagger : 1,
-        scrollTrigger: {
-          trigger: ".feature-card",
-          start:   "top 60%",
-          end : "bottom 60%",
-          scrub : .4
-        },
-      }
-    );
-  }, []);
-
   return (
     <div
-      ref       = {ref}
       className = "
         card-hover p-6 flex flex-col gap-4
         group cursor-default feature-card
@@ -491,7 +469,7 @@ const LandingPage = () => {
           </span>
         </div>
         <p className="text-xs text-white/25">
-          © 2025 TaskFlow. Built with React, Redux & GSAP.
+          © 2025 TaskFlow. All Rights Reserved.
         </p>
       </footer>
     </div>

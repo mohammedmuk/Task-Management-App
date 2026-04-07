@@ -5,7 +5,7 @@ import { ENDPOINTS } from "@utils/constants";
 
 // ── Initial State ────────────────────────────────────
 const initialState = {
-    user: 'mohammedmuk',
+    user: localStorage.getItem("username") || null,
     token: localStorage.getItem("token") || null,
     loading: false,
     error: null,
@@ -39,8 +39,17 @@ export const loginUser = createAsyncThunk(
     "auth/loginUser",
     async ({ identifier, password }, thunkAPI) => {
         try {
-            const res = await api.post("/token/", { identifier, password });
-            return res.data;
+            // 1. Get the token
+            const tokenRes = await api.post("/token/", { identifier, password });
+            const { access, refresh } = tokenRes.data;
+
+            // 2. Fetch current user profile using the new token
+            const userRes = await api.get(ENDPOINTS.USERS_ME, {
+                headers: { Authorization: `Bearer ${access}` },
+            });
+            const username = userRes.data.results?.[0]?.username || null;
+
+            return { access, refresh, username };
         } catch (err) {
             return thunkAPI.rejectWithValue(
                 err.response?.data || { message: "Login failed" }
@@ -151,7 +160,7 @@ const authSlice = createSlice({
             state.emailVerified = false;
             state.codeRequested = false;
             localStorage.removeItem("token");
-            localStorage.removeItem("user");
+            localStorage.removeItem("username");
         },
 
         // Clear error / success messages
@@ -196,10 +205,12 @@ const authSlice = createSlice({
             .addCase(loginUser.pending, setLoading)
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.loading = false;
-                state.user = action.payload.user;
+                state.user = action.payload.username;
                 state.token = action.payload.access;
                 localStorage.setItem("token", action.payload.access);
-                localStorage.setItem("user", JSON.stringify(action.payload.user));
+                if (action.payload.username) {
+                    localStorage.setItem("username", action.payload.username);
+                }
             })
             .addCase(loginUser.rejected, setError)
 
@@ -229,7 +240,7 @@ const authSlice = createSlice({
                 state.user = null;
                 state.token = null;
                 localStorage.removeItem("token");
-                localStorage.removeItem("user");
+                localStorage.removeItem("username");
             })
             .addCase(deleteUser.rejected, setError)
 

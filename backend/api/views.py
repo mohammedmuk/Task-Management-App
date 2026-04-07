@@ -24,11 +24,11 @@ class CreateListUsersView(generics.ListCreateAPIView):
     serializer_class = serializers.UsersSerializer
     permission_classes = []
 
-    def get_permissions(self):
-        permission_classess = super().get_permissions()
-        if self.request.method == 'GET':
-            return [IsAdminUser()]
-        return permission_classess
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        return qs.filter(id=self.request.user.id)
+
 
 class RetrieveUpdateDeleteUserView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
@@ -46,7 +46,7 @@ class UserAccountActivation(APIView):
         user = User.objects.filter(email=email).first()
         
 
-        profile_activation = AccountActivation.objects.filter(user=user).first()
+        profile_activation = AccountActivation.objects.filter(user=user).last()
 
         if not user:
             return Response({"email" : "Incorrect Email."}, status.HTTP_404_NOT_FOUND)
@@ -123,7 +123,7 @@ class ForgotPasswordView(APIView):
         code = request.data.get('code')
         password = request.data.get('password')
 
-        reset_password = UserChangePassword.objects.filter(user=user).first()
+        reset_password = UserChangePassword.objects.filter(user=user).last()
 
         if not user:
             return Response({"email" : "Incorrect Email."}, status=status.HTTP_404_NOT_FOUND)

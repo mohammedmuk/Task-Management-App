@@ -23,7 +23,10 @@ const App = () => {
         {/* ── Public ──────────────────────────────── */}
         <Route
           path="/"
-          element={<LandingPage />}
+          element={
+            isAuthenticated ? <Navigate to="/dashboard" replace />
+              : <LandingPage />
+          }
         />
 
         <Route

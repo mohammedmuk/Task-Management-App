@@ -38,6 +38,11 @@ const useAuth = () => {
 
     const handleLogin = async (credentials) => {
         const result = await dispatch(loginUser(credentials));
+
+        if (result['payload']['non_field_errors']?.[0] == "User account is disabled") {
+            navigate("/verify-email", { state: { email: credentials.identifier, password: credentials.password } });
+        }
+
         if (loginUser.fulfilled.match(result)) {
             navigate("/dashboard");
         }
