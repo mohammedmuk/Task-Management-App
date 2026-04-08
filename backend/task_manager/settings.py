@@ -65,6 +65,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     os.getenv('FRONTEND_URL'),
+    os.getenv('FRONTEND_URL2'),
 ]
 
 ROOT_URLCONF = 'task_manager.urls'
