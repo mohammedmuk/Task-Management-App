@@ -68,6 +68,11 @@ CORS_ALLOWED_ORIGINS = [
     'https://task-management-r5vuy174q-mohammedmuks-projects.vercel.app',
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://task-management-app-bice-chi.vercel.app",
+    "https://task-management-r5vuy174q-mohammedmuks-projects.vercel.app",
+]
+
 ROOT_URLCONF = 'task_manager.urls'
 
 TEMPLATES = [
