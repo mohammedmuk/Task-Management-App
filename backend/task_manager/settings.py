@@ -61,6 +61,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -72,6 +73,8 @@ CSRF_TRUSTED_ORIGINS = [
     "https://task-management-app-bice-chi.vercel.app",
     "https://task-management-r5vuy174q-mohammedmuks-projects.vercel.app",
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'task_manager.urls'
 
