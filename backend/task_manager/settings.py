@@ -29,7 +29,7 @@ AUTH_USER_MODEL = 'api.User'
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -64,8 +64,8 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    os.getenv('FRONTEND_URL'),
-    os.getenv('FRONTEND_URL2'),
+    'https://task-management-app-bice-chi.vercel.app',
+    'https://task-management-r5vuy174q-mohammedmuks-projects.vercel.app',
 ]
 
 ROOT_URLCONF = 'task_manager.urls'
