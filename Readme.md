@@ -43,6 +43,3 @@ TaskFlow is a full-stack task management application that helps users organize t
 4. **Create tasks** – The user adds tasks and sets a priority for each one.
 5. **Complete tasks** – When a task is finished, the user checks it off.
 6. **Reset password (if needed)** – The user requests a reset code, receives it by email, enters it, and chooses a new password.
-
----
-r-username)
